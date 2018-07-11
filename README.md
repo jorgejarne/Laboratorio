@@ -7,6 +7,8 @@ Este repositorio recoge los programas del proyecto desarrollado en el laboratori
 
 ## Material utilizado
 
+- PC ubuntu 16.04 LTS
+
 - Smartphone con NFC
 
 - Modulo NFC v3
@@ -21,6 +23,7 @@ Este repositorio recoge los programas del proyecto desarrollado en el laboratori
 
 ## Dependencias 
 
+
 Arduino IDE 1.8.5 con:
   - Plugin [ESP8266](https://github.com/esp8266/Arduino)
   
@@ -33,6 +36,8 @@ Android Studio 1.5.1 con:
   - Android Build Tools v27.0.2
   
   - Android Support Repository
+  
+Mosquitto 1.4.14
 
 ## Parte I - Lectura y escritura de tags usando un modulo NFC y el ESP8266
 
@@ -63,11 +68,14 @@ Este [programa](https://github.com/jorgejarne/Laboratorio/blob/master/nfcEsp8266
 
 El objetivo que tiene esta parte es realizar el intercambio de informacion entre un smartphone con NFC y el ESP8266 con su modulo NFC. El smartphone va a actuar como si fuera una tarjeta o tag, este modo de funcionamiento tambien es conocido como Host-based card emulation (HCE) y esta disponible desde la version Android 4.4. EL HCE puede tener diferentes servicios funcionando internamente por eso a cada uno de estos se le asigna un ApplicationID (AID), entonces cuando el otro dispositvo NFC se acerca, le envia el AID del servicio del HCE con el que quiere hablar. En este caso no ha sido necesario usar ningun AID concreto ya que solo se tiene un servicio funcionando en la app.
 
-La [aplicacion](https://github.com/jorgejarne/Laboratorio/blob/master/appNFC.apk) de android se encuentra ya compilada en formato **apk** para instalarla directamente en el smartphone. Tambien se encuentra en el repositorio el [proyecto](https://github.com/jorgejarne/Laboratorio/blob/master/androidNfcHce.zip) completo de android studio por si el usuario quiere añadir mas servicios o hacer otro tipo de modificaciones.
+La [aplicacion](https://github.com/jorgejarne/Laboratorio/blob/master/appNFC.apk) de android se encuentra ya compilada en formato **apk** para instalarla directamente en el smartphone. Tambien se encuentra en el repositorio el [proyecto completo](https://github.com/jorgejarne/Laboratorio/blob/master/androidNfcHce.zip) de android studio por si el usuario quiere añadir mas servicios o hacer otro tipo de modificaciones.
 
-Tras instalar la aplicacion Android y ejecutarla, aparecen hay dos ventanas, la superior muestra que datos se han intercambiado y en la venta inferior hay dos campos llamados **Nombre del wifi(SSID)** y **Contrasena del wifi(PASS)** que el usuario tiene que rellenar. La informacion introducida en estos campos es la que se enviara al modulo NFC cuando se acerque el movil a el.
+Tras instalar la aplicacion Android y ejecutarla, aparecen dos ventanas, la superior muestra que datos se han intercambiado y en la venta inferior hay dos campos llamados **Nombre del wifi(SSID)** y **Contrasena del wifi(PASS)** que el usuario tiene que rellenar. La informacion introducida en estos campos es la que se enviara al modulo NFC cuando se acerque el movil a el.
 
-El SoC ESP8266 debe tener cargado este [sketch](https://github.com/jorgejarne/Laboratorio/blob/master/lecturaHCE.ino). El programa esta a la espera de que se acerque algun dispositivo NFC para iniciar la conversacion enviandole el AID. Este valor se encunetra en la variable **uint8_t selectApdu[]** del codigo, sin embargo no influye, ya que se usaria solo en el caso de que se tuvieran diferentes AID en la app de Android desarrollada. Si el intercambio de informacion entre los dos dispositivos se a realizado correctamente, el modulo ESP8266 intentara concectarse a la red con el nombre y contraseña que se escribieron en los campos de la app del movil.
+El SoC ESP8266 debe tener cargado este [sketch](https://github.com/jorgejarne/Laboratorio/blob/master/lecturaHCE.ino). El programa esta a la espera de que se acerque algun dispositivo NFC para iniciar la conversacion enviandole el AID. Este valor se encuentra en la variable **uint8_t selectApdu[]** del codigo, sin embargo, no influye ya que se usaria solo en el caso de que se tuvieran diferentes AID en la app de Android desarrollada. Si el intercambio de informacion entre los dos dispositivos se ha realizado correctamente, el modulo ESP8266 intentara concectarse a la red con el nombre y contraseña que se escribieron en los campos de la app del movil.
+
+
+## Parte III - Control de sensor conectado a ESP8266 usando el protocolo MQTT
 
 
 
