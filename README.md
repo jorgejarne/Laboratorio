@@ -39,6 +39,8 @@ Android Studio 1.5.1 con:
   
 Mosquitto 1.4.14
 
+**IMPORTANTE: todos los programas que se cargan en el SoC ESP8266 envian mensajes por serial para que se pueda visualizar si todo esta funncionando correctamente. Para ver estos mensajes en el PC es necesario abrir el Arduino IDE y usar el monitor serie. El monitor tiene una ventana en el lado inferior derecho para selecionar los baudios de la comunicacion, este numero debera coincidir con el numero que se introduce en cada programa cuando se llama a la funcion "Serial.begin(_BAUDIOS_)" **
+
 ## Parte I - Lectura y escritura de tags usando un modulo NFC y el ESP8266
 
 ### Preparación hardware
@@ -76,6 +78,15 @@ El SoC ESP8266 debe tener cargado este [sketch](https://github.com/jorgejarne/La
 
 
 ## Parte III - Control de sensor conectado a ESP8266 usando el protocolo MQTT
+
+Se va a controlar el led que tiene integrado el modulo ESP8266 usando el protocolo MQTT. Este protocolo tiene el *publisher* que sera en este caso un ordenador Ubunutu con moquitto instalado, el *subscriber* sera el propio modulo, el *broker* la pagina web *test.mosquitto.org* y el *topic* es llamado estadoLed. 
+
+Para instalar el programa mosquitto en Ubunutu hay que abrir una terminal y escribir: **sudo apt-get install mosquitto mosquitto-clients**. Una vez instalado, en la misma terminal se puede introducir: **mosquitto_pub -h test.mosquitto.org -t estadoLed -m "1"**, el parametro que acompaña a *-m* indica el valor que se va a enviar, en este caso solo se usa el 0 y el 1 para apagar y encender, respectivamente, el led del ESP8266. Si se quiere usar un broker distinto hay que sustituir el argumento que va junto a *-h* por el host a usar.
+
+Respecto el [programa](https://github.com/jorgejarne/Laboratorio/blob/master/mqttesp8266.ino) que se carga en el ESP8266, es necesario modificar las variables globales **ssid** y **password** por las credenciales de la red wifi a la que se vaya a conectar. Si se quiere usar otro broker, hay que cambiar tambien la variable **mqtt_server**. Otro parametro a tener en cuenta es el numero del puerto que se usa para conectarse al broker, lo habitual es usar el 1883, si su host usa otro debera cambiarlo en la parte del codigo donde se llama a la funcion **client.setServer(mqtt_server, 1883)**.
+
+Si todo va correctamente, se puede ver como al ir publicando valores (0 o 1) desde la terminal de Ubuntu se va cambiando el estado del led.
+
 
 
 
